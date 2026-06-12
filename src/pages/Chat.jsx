@@ -1,9 +1,121 @@
 import { useState } from "react";
+import { getSchemeRecommendations } from "../services/gemini";
 
 export default function Chat() {
   const [selected, setSelected] = useState("");
-  const [showResults, setShowResults] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Farmer
+  const [age, setAge] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [land, setLand] = useState("");
+  const [income, setIncome] = useState("");
+
+  // Student
+  const [studentName, setStudentName] = useState("");
+  const [studentAge, setStudentAge] = useState("");
+  const [studentState, setStudentState] = useState("");
+  const [course, setCourse] = useState("");
+  const [studentIncome, setStudentIncome] = useState("");
+
+  // Woman
+  const [womanName, setWomanName] = useState("");
+  const [womanAge, setWomanAge] = useState("");
+  const [womanState, setWomanState] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [womanIncome, setWomanIncome] = useState("");
+
+  // Worker
+  const [workerName, setWorkerName] = useState("");
+  const [workerAge, setWorkerAge] = useState("");
+  const [workerState, setWorkerState] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [workerIncome, setWorkerIncome] = useState("");
+
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleFarmerCheck() {
+    try {
+      setLoading(true);
+
+      const response = await getSchemeRecommendations({
+        category: "Farmer",
+        age,
+        state: stateName,
+        land,
+        income,
+      });
+
+      setResult(response);
+    } catch (error) {
+      setResult("❌ Error getting recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleStudentCheck() {
+    try {
+      setLoading(true);
+
+      const response = await getSchemeRecommendations({
+        category: "Student",
+        name: studentName,
+        age: studentAge,
+        state: studentState,
+        course,
+        income: studentIncome,
+      });
+
+      setResult(response);
+    } catch (error) {
+      setResult("❌ Error getting recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleWomanCheck() {
+    try {
+      setLoading(true);
+
+      const response = await getSchemeRecommendations({
+        category: "Woman",
+        name: womanName,
+        age: womanAge,
+        state: womanState,
+        maritalStatus,
+        income: womanIncome,
+      });
+
+      setResult(response);
+    } catch (error) {
+      setResult("❌ Error getting recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleWorkerCheck() {
+    try {
+      setLoading(true);
+
+      const response = await getSchemeRecommendations({
+        category: "Worker",
+        name: workerName,
+        age: workerAge,
+        state: workerState,
+        occupation,
+        income: workerIncome,
+      });
+
+      setResult(response);
+    } catch (error) {
+      setResult("❌ Error getting recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section
@@ -28,28 +140,40 @@ export default function Chat() {
             <div className="grid md:grid-cols-2 gap-4">
 
               <button
-                onClick={() => setSelected("farmer")}
+                onClick={() => {
+                  setResult("");
+                  setSelected("farmer");
+                }}
                 className="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl"
               >
                 👨‍🌾 Farmer
               </button>
 
               <button
-                onClick={() => setSelected("student")}
+                onClick={() => {
+                  setResult("");
+                  setSelected("student");
+                }}
                 className="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl"
               >
                 🎓 Student
               </button>
 
               <button
-                onClick={() => setSelected("woman")}
+                onClick={() => {
+                  setResult("");
+                  setSelected("woman");
+                }}
                 className="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl"
               >
                 👩 Woman
               </button>
 
               <button
-                onClick={() => setSelected("worker")}
+                onClick={() => {
+                  setResult("");
+                  setSelected("worker");
+                }}
                 className="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl"
               >
                 👷 Worker
@@ -59,15 +183,17 @@ export default function Chat() {
 
           </div>
         )}
-
         {/* FARMER */}
 
         {selected === "farmer" && (
           <div className="bg-slate-800 rounded-2xl p-8">
 
             <button
-              onClick={() => setSelected("")}
-              className="mb-6 text-purple-400 hover:text-purple-300"
+              onClick={() => {
+                setSelected("");
+                setResult("");
+              }}
+              className="mb-6 text-purple-400"
             >
               ← Back
             </button>
@@ -81,68 +207,41 @@ export default function Chat() {
               <input
                 type="number"
                 placeholder="Age"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="State"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={stateName}
+                onChange={(e) => setStateName(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Land Size (Acres)"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={land}
+                onChange={(e) => setLand(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Annual Income"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={income}
+                onChange={(e) => setIncome(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <button
-                onClick={() => {
-                  setIsAnalyzing(true);
-
-                  setTimeout(() => {
-                    setIsAnalyzing(false);
-                    setShowResults(true);
-                  }, 2000);
-                }}
+                onClick={handleFarmerCheck}
                 className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl"
               >
-                Analyze Eligibility
-              </button> 
-
-              {isAnalyzing && (
-                <div className="mt-6 bg-blue-900/30 border border-blue-700 p-5 rounded-xl">
-                  <h3 className="text-blue-400 font-bold text-lg">
-                    🤖 CivicMind AI
-                  </h3>
-
-                  <p className="mt-2">
-                     Analyzing eligibility...
-                  </p>
-                </div>
-              )}                           
-
-              {showResults && (
-                <div className="mt-6 bg-green-900/30 border border-green-700 p-5 rounded-xl">
-                <h3 className="text-xl font-bold text-green-400">
-                  ✅ PM Kisan Samman Nidhi
-                </h3>
-
-                <p className="mt-2">
-                  Benefit: ₹6000 per year
-                </p>
-
-    <button className="mt-4 bg-purple-600 px-4 py-2 rounded-lg">
-      Apply Through CSC
-    </button>
-  </div>
-)}
+                Check Schemes
+              </button>
 
             </div>
 
@@ -155,8 +254,11 @@ export default function Chat() {
           <div className="bg-slate-800 rounded-2xl p-8">
 
             <button
-              onClick={() => setSelected("")}
-              className="mb-6 text-purple-400 hover:text-purple-300"
+              onClick={() => {
+                setSelected("");
+                setResult("");
+              }}
+              className="mb-6 text-purple-400"
             >
               ← Back
             </button>
@@ -170,34 +272,47 @@ export default function Chat() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Age"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={studentAge}
+                onChange={(e) => setStudentAge(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="State"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={studentState}
+                onChange={(e) => setStudentState(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="Course / Degree"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Family Annual Income"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={studentIncome}
+                onChange={(e) => setStudentIncome(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl">
+              <button
+                onClick={handleStudentCheck}
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl"
+              >
                 Check Scholarships
               </button>
 
@@ -205,15 +320,17 @@ export default function Chat() {
 
           </div>
         )}
-
         {/* WOMAN */}
 
         {selected === "woman" && (
           <div className="bg-slate-800 rounded-2xl p-8">
 
             <button
-              onClick={() => setSelected("")}
-              className="mb-6 text-purple-400 hover:text-purple-300"
+              onClick={() => {
+                setSelected("");
+                setResult("");
+              }}
+              className="mb-6 text-purple-400"
             >
               ← Back
             </button>
@@ -227,34 +344,49 @@ export default function Chat() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={womanName}
+                onChange={(e) => setWomanName(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Age"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={womanAge}
+                onChange={(e) => setWomanAge(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="State"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={womanState}
+                onChange={(e) => setWomanState(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
-              <input
-                type="text"
-                placeholder="Marital Status"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
-              />
+              <select
+                value={maritalStatus}
+                onChange={(e) => setMaritalStatus(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
+              >
+                <option value="">Select Marital Status</option>
+                <option value="Married">Married</option>
+                <option value="Unmarried">Unmarried</option>
+              </select> 
 
               <input
                 type="number"
                 placeholder="Family Annual Income"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={womanIncome}
+                onChange={(e) => setWomanIncome(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl">
+              <button
+                onClick={handleWomanCheck}
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl"
+              >
                 Check Schemes
               </button>
 
@@ -269,8 +401,11 @@ export default function Chat() {
           <div className="bg-slate-800 rounded-2xl p-8">
 
             <button
-              onClick={() => setSelected("")}
-              className="mb-6 text-purple-400 hover:text-purple-300"
+              onClick={() => {
+                setSelected("");
+                setResult("");
+              }}
+              className="mb-6 text-purple-400"
             >
               ← Back
             </button>
@@ -284,39 +419,78 @@ export default function Chat() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={workerName}
+                onChange={(e) => setWorkerName(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Age"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={workerAge}
+                onChange={(e) => setWorkerAge(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="State"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={workerState}
+                onChange={(e) => setWorkerState(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="text"
                 placeholder="Occupation"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={occupation}
+                onChange={(e) => setOccupation(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
               <input
                 type="number"
                 placeholder="Monthly Income"
-                className="w-full p-3 rounded-xl bg-slate-700 outline-none"
+                value={workerIncome}
+                onChange={(e) => setWorkerIncome(e.target.value)}
+                className="w-full p-3 rounded-xl bg-slate-700"
               />
 
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl">
+              <button
+                onClick={handleWorkerCheck}
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl"
+              >
                 Check Schemes
               </button>
 
             </div>
 
+          </div>
+        )}
+
+        {/* COMMON AI RESULT */}
+
+        {loading && (
+          <div className="mt-6 bg-blue-900/30 border border-blue-700 p-5 rounded-xl">
+            <h3 className="text-blue-400 font-bold text-lg">
+              🤖 CivicMind AI
+            </h3>
+
+            <p className="mt-2">
+              Analyzing eligibility...
+            </p>
+          </div>
+        )}
+
+        {result && (
+          <div className="mt-6 bg-green-900/30 border border-green-700 p-5 rounded-xl">
+            <h3 className="text-xl font-bold text-green-400">
+              ✅ AI Recommended Schemes
+            </h3>
+
+            <div className="mt-3 whitespace-pre-wrap">
+              {result}
+            </div>
           </div>
         )}
 
