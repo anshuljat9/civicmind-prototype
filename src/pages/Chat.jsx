@@ -2,6 +2,8 @@ import { useState } from "react";
 
 export default function Chat() {
   const [selected, setSelected] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   return (
     <section
@@ -100,9 +102,47 @@ export default function Chat() {
                 className="w-full p-3 rounded-xl bg-slate-700 outline-none"
               />
 
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl">
-                Check Schemes
-              </button>
+              <button
+                onClick={() => {
+                  setIsAnalyzing(true);
+
+                  setTimeout(() => {
+                    setIsAnalyzing(false);
+                    setShowResults(true);
+                  }, 2000);
+                }}
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl"
+              >
+                Analyze Eligibility
+              </button> 
+
+              {isAnalyzing && (
+                <div className="mt-6 bg-blue-900/30 border border-blue-700 p-5 rounded-xl">
+                  <h3 className="text-blue-400 font-bold text-lg">
+                    🤖 CivicMind AI
+                  </h3>
+
+                  <p className="mt-2">
+                     Analyzing eligibility...
+                  </p>
+                </div>
+              )}                           
+
+              {showResults && (
+                <div className="mt-6 bg-green-900/30 border border-green-700 p-5 rounded-xl">
+                <h3 className="text-xl font-bold text-green-400">
+                  ✅ PM Kisan Samman Nidhi
+                </h3>
+
+                <p className="mt-2">
+                  Benefit: ₹6000 per year
+                </p>
+
+    <button className="mt-4 bg-purple-600 px-4 py-2 rounded-lg">
+      Apply Through CSC
+    </button>
+  </div>
+)}
 
             </div>
 
