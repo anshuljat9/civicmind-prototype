@@ -16,11 +16,20 @@ User Details:
 ${JSON.stringify(userData)}
 
 Suggest:
+
 1. Eligible government schemes
 2. Benefits of each scheme
 3. Why the user qualifies
+4. Required documents for each scheme
+5. Step-by-step application process
+6. Official website if available
+
+Format response nicely with headings.
 
 Keep response simple and easy to read.
+IMPORTANT:
+Respond completely in simple Hindi written in Devanagari script.
+Use easy language that rural and less educated citizens can understand.
 `;
 
   const result = await model.generateContent(prompt);

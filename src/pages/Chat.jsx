@@ -3,6 +3,7 @@ import { getSchemeRecommendations } from "../services/gemini";
 
 export default function Chat() {
   const [selected, setSelected] = useState("");
+  const [language, setLanguage] = useState("english");
 
   // Farmer
   const [age, setAge] = useState("");
@@ -117,6 +118,27 @@ export default function Chat() {
     }
   }
 
+  function speakResult(text) {
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+
+  speech.lang = "hi-IN";
+  speech.rate = 0.85;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+
+  function speakResult(text) {
+  const speech = new SpeechSynthesisUtterance(text);
+
+  speech.lang = "hi-IN";
+  speech.rate = 0.9;
+
+  window.speechSynthesis.speak(speech);
+}
+
   return (
     <section
       id="chat"
@@ -125,17 +147,43 @@ export default function Chat() {
       <div className="max-w-4xl w-full">
 
         {!selected && (
-          <div className="bg-slate-800 rounded-2xl p-8">
+  <div className="bg-slate-800 rounded-2xl p-8">
 
-            <h2 className="text-3xl font-bold mb-6">
-              CivicMind Assistant
-            </h2>
+    <h2 className="text-3xl font-bold mb-6">
+      CivicMind Assistant
+    </h2>
 
-            <div className="bg-slate-700 p-4 rounded-xl mb-6">
-              Namaste 👋
-              <br />
-              Please select your category.
-            </div>
+    {/* LANGUAGE SELECTOR */}
+
+    <div className="flex gap-3 mb-6">
+      <button
+        onClick={() => setLanguage("english")}
+        className={`px-4 py-2 rounded-lg ${
+          language === "english"
+            ? "bg-purple-600"
+            : "bg-slate-700"
+        }`}
+      >
+        🇬🇧 English
+      </button>
+
+      <button
+        onClick={() => setLanguage("hindi")}
+        className={`px-4 py-2 rounded-lg ${
+          language === "hindi"
+            ? "bg-purple-600"
+            : "bg-slate-700"
+        }`}
+      >
+        🇮🇳 Hindi
+      </button>
+    </div>
+
+    <div className="bg-slate-700 p-4 rounded-xl mb-6">
+      Namaste 👋
+      <br />
+      Please select your category.
+    </div>
 
             <div className="grid md:grid-cols-2 gap-4">
 
@@ -491,8 +539,39 @@ export default function Chat() {
             <div className="mt-3 whitespace-pre-wrap">
               {result}
             </div>
+
+            <div className="mt-4 flex gap-3 flex-wrap">
+              <button
+                onClick={() => speakResult(result)}
+                className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
+              >
+                🔊 Listen in Hindi
+              </button>
+
+              <button
+                onClick={() => window.speechSynthesis.cancel()}
+                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
+              >
+                ⏹ Stop
+              </button>
+            </div>
           </div>
-        )}
+        )}        
+
+        {result && (
+          <div className="mt-6 bg-yellow-900/20 border border-yellow-700 p-5 rounded-xl">
+            <h3 className="text-xl font-bold text-yellow-400">
+              📄 Required Documents
+            </h3>
+
+            <ul className="mt-3 space-y-2">
+              <li>✅ Aadhaar Card</li>
+              <li>✅ Bank Passbook</li>
+              <li>✅ Income Certificate</li>
+              <li>✅ Passport Size Photo</li>
+            </ul>
+          </div>
+        )}        
 
       </div>
     </section>
