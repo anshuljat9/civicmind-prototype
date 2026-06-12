@@ -1,10 +1,16 @@
 import Navbar from "../components/Navbar";
 import Chat from "./Chat";
 
-export default function Landing() {
+export default function Landing({
+  darkMode,
+  setDarkMode,
+}) {
   return (
     <>
-      <Navbar />
+      <Navbar
+  darkMode={darkMode}
+  setDarkMode={setDarkMode}
+/>
 
       {/* Hero Section */}
       <section className="min-h-screen bg-slate-950 text-white flex items-center justify-center px-6">

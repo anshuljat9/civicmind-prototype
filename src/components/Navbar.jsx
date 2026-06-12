@@ -1,4 +1,7 @@
-export default function Navbar() {
+export default function Navbar({
+  darkMode,
+  setDarkMode,
+}) {
   return (
     <nav className="w-full border-b border-slate-800 bg-slate-950">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -18,7 +21,12 @@ export default function Navbar() {
           </button>
 
           <button className="text-slate-300 hover:text-white">
-            🌙
+            <button
+  onClick={() => setDarkMode(!darkMode)}
+  className="text-slate-300 hover:text-white"
+>
+  {darkMode ? "☀️" : "🌙"}
+</button>
           </button>
 
           <button className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700">
