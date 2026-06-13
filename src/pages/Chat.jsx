@@ -36,88 +36,114 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
 
   async function handleFarmerCheck() {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await getSchemeRecommendations({
-        category: "Farmer",
-        age,
-        state: stateName,
-        land,
-        income,
-      });
+    const response = await getSchemeRecommendations({
+      category: "Farmer",
+      age,
+      state: stateName,
+      land,
+      income,
+    });
 
-      setResult(response);
-    } catch (error) {
-      setResult("❌ Error getting recommendations.");
-    } finally {
-      setLoading(false);
-    }
+    setResult(response);
+  } catch (error) {
+    console.error("FULL ERROR:", error);
+
+    setResult(
+      "❌ " +
+        (error?.message ||
+          error?.toString() ||
+          "Unknown Error")
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   async function handleStudentCheck() {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await getSchemeRecommendations({
-        category: "Student",
-        name: studentName,
-        age: studentAge,
-        state: studentState,
-        course,
-        income: studentIncome,
-      });
+    const response = await getSchemeRecommendations({
+      category: "Student",
+      name: studentName,
+      age: studentAge,
+      state: studentState,
+      course,
+      income: studentIncome,
+    });
 
-      setResult(response);
-    } catch (error) {
-      setResult("❌ Error getting recommendations.");
-    } finally {
-      setLoading(false);
-    }
+    setResult(response);
+  } catch (error) {
+    console.error("FULL ERROR:", error);
+
+    setResult(
+      "❌ " +
+        (error?.message ||
+          error?.toString() ||
+          "Unknown Error")
+    );
+  } finally {
+    setLoading(false);
   }
-
+}
   async function handleWomanCheck() {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await getSchemeRecommendations({
-        category: "Woman",
-        name: womanName,
-        age: womanAge,
-        state: womanState,
-        maritalStatus,
-        income: womanIncome,
-      });
+    const response = await getSchemeRecommendations({
+      category: "Woman",
+      name: womanName,
+      age: womanAge,
+      state: womanState,
+      maritalStatus,
+      income: womanIncome,
+    });
 
-      setResult(response);
-    } catch (error) {
-      setResult("❌ Error getting recommendations.");
-    } finally {
-      setLoading(false);
-    }
+    setResult(response);
+  } catch (error) {
+    console.error("FULL ERROR:", error);
+
+    setResult(
+      "❌ " +
+        (error?.message ||
+          error?.toString() ||
+          "Unknown Error")
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   async function handleWorkerCheck() {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await getSchemeRecommendations({
-        category: "Worker",
-        name: workerName,
-        age: workerAge,
-        state: workerState,
-        occupation,
-        income: workerIncome,
-      });
+    const response = await getSchemeRecommendations({
+      category: "Worker",
+      name: workerName,
+      age: workerAge,
+      state: workerState,
+      occupation,
+      income: workerIncome,
+    });
 
-      setResult(response);
-    } catch (error) {
-      setResult("❌ Error getting recommendations.");
-    } finally {
-      setLoading(false);
-    }
+    setResult(response);
+  } catch (error) {
+    console.error("FULL ERROR:", error);
+
+    setResult(
+      "❌ " +
+        (error?.message ||
+          error?.toString() ||
+          "Unknown Error")
+    );
+  } finally {
+    setLoading(false);
   }
-
+}
   function speakResult(text) {
   window.speechSynthesis.cancel();
 
@@ -130,14 +156,6 @@ export default function Chat() {
   window.speechSynthesis.speak(speech);
 }
 
-  function speakResult(text) {
-  const speech = new SpeechSynthesisUtterance(text);
-
-  speech.lang = "hi-IN";
-  speech.rate = 0.9;
-
-  window.speechSynthesis.speak(speech);
-}
 
   return (
     <section
