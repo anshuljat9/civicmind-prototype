@@ -1,24 +1,48 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(
+  import.meta.env.VITE_GEMINI_API_KEY
+);
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+});
+
 export async function getSchemeRecommendations(userData) {
-  return `
-✅ पात्र योजना: प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)
+  try {
+const prompt = `
+You are an expert on Indian Government Schemes.
 
-💰 लाभ:
-₹6000 प्रति वर्ष सीधे बैंक खाते में
+User Details:
+${JSON.stringify(userData)}
 
-📄 आवश्यक दस्तावेज:
-• आधार कार्ड
-• बैंक पासबुक
-• भूमि रिकॉर्ड
-• पासपोर्ट साइज फोटो
+Suggest:
 
-📝 आवेदन प्रक्रिया:
-1. नजदीकी CSC केंद्र पर जाएं
-2. आवश्यक दस्तावेज जमा करें
-3. आवेदन फॉर्म भरें
-4. सत्यापन पूरा होने की प्रतीक्षा करें
-5. लाभ बैंक खाते में प्राप्त करें
+1. Eligible government schemes
+2. Benefits of each scheme
+3. Why the user qualifies
+4. Required documents for each scheme
+5. Step-by-step application process
+6. Official website link
 
-🌐 आधिकारिक वेबसाइट:
-https://pmkisan.gov.in
+Rules:
+- Give 3 to 5 most relevant schemes.
+- Use simple Hindi.
+- Use headings and bullet points.
+- Mention official government website whenever available.
+- Explain in a way that less educated citizens can understand.
+
+Respond completely in Hindi (Devanagari).
 `;
+
+    const result = await model.generateContent(prompt);
+
+    return result.response.text();
+  } catch (error) {
+    console.error(error);
+
+    return `❌ Gemini Error: ${
+      error?.message || "Unknown Error"
+    }`;
+  }
 }
