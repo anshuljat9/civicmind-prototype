@@ -10,11 +10,14 @@ const model = genAI.getGenerativeModel({
 
 export async function getSchemeRecommendations(userData) {
   try {
-const prompt = `
+    const prompt = `
 You are an expert on Indian Government Schemes.
 
 User Details:
 ${JSON.stringify(userData)}
+
+Language:
+${userData.language}
 
 Suggest:
 
@@ -27,12 +30,15 @@ Suggest:
 
 Rules:
 - Give 3 to 5 most relevant schemes.
-- Use simple Hindi.
 - Use headings and bullet points.
 - Mention official government website whenever available.
-- Explain in a way that less educated citizens can understand.
+- Explain in a simple way that less educated citizens can understand.
 
+If language is "hindi":
 Respond completely in Hindi (Devanagari).
+
+If language is "english":
+Respond completely in English.
 `;
 
     const result = await model.generateContent(prompt);

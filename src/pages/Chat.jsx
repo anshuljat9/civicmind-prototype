@@ -45,6 +45,7 @@ export default function Chat() {
       state: stateName,
       land,
       income,
+      language,
     });
 
     setResult(response);
@@ -67,13 +68,14 @@ export default function Chat() {
     setLoading(true);
 
     const response = await getSchemeRecommendations({
-      category: "Student",
-      name: studentName,
-      age: studentAge,
-      state: studentState,
-      course,
-      income: studentIncome,
-    });
+    category: "Student",
+    name: studentName,
+    age: studentAge,
+    state: studentState,
+    course,
+    income: studentIncome,
+    language,
+  });
 
     setResult(response);
   } catch (error) {
@@ -94,13 +96,14 @@ export default function Chat() {
     setLoading(true);
 
     const response = await getSchemeRecommendations({
-      category: "Woman",
-      name: womanName,
-      age: womanAge,
-      state: womanState,
-      maritalStatus,
-      income: womanIncome,
-    });
+    category: "Woman",
+    name: womanName,
+    age: womanAge,
+    state: womanState,
+    maritalStatus,
+    income: womanIncome,
+    language,
+  });
 
     setResult(response);
   } catch (error) {
@@ -122,14 +125,14 @@ export default function Chat() {
     setLoading(true);
 
     const response = await getSchemeRecommendations({
-      category: "Worker",
-      name: workerName,
-      age: workerAge,
-      state: workerState,
-      occupation,
-      income: workerIncome,
-    });
-
+    category: "Worker",
+    name: workerName,
+    age: workerAge,
+    state: workerState,
+    occupation,
+    income: workerIncome,
+    language,
+  });
     setResult(response);
   } catch (error) {
     console.error("FULL ERROR:", error);
@@ -149,7 +152,11 @@ export default function Chat() {
 
   const speech = new SpeechSynthesisUtterance(text);
 
-  speech.lang = "hi-IN";
+  speech.lang =
+    language === "hindi"
+      ? "hi-IN"
+      : "en-US";
+
   speech.rate = 0.85;
   speech.pitch = 1;
 
@@ -563,7 +570,9 @@ export default function Chat() {
                 onClick={() => speakResult(result)}
                 className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
               >
-                🔊 Listen in Hindi
+                🔊 {language === "hindi"
+                  ? "Listen in Hindi"
+                  : "Listen in English"}
               </button>
 
               <button
